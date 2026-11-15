@@ -165,7 +165,7 @@ The Sources page inside the game lists all of these with links.
 
 ## Important notices
 
-**The game simplifies the real storm, and says so.**
+**The game simplifies the real storm, and says that.**
 
 - The storm is 6 times stronger in the game than it was in reality, so that it matters in a 10-sol mission.
 - The game gives one whole turn of warning. The real warning was under one hour.
