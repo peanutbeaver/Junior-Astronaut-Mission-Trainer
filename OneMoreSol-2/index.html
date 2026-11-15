@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneMoreSol</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/intro.css">
+    <link rel="icon" type="image/png" href="assets/iconOfMars.png">
+</head>
+<body>
+    <!-- ===== START SCREEN ===== -->
+    <!-- No rules to read here: the Launch button starts the training with Pip (js/intro.js). -->
+    <div class="startscreen active">
+        <button class="small-button sound-button start-sound" title="Sound on or off"></button>
+        <div class="landing-main">
+            <div class="kicker">Junior Astronaut Mission Trainer</div>
+            <h1 id="title" aria-label="One More Sol"><span id="logo"></span></h1>
+            <p class="tagline">Can you keep a Mars base alive for <b>10 sols</b>?</p>
+
+            <div class="callsign">
+                <span class="callsign-label">Your call sign</span>
+                <span class="callsign-name" id="callsignName"></span>
+                <button id="callsignRoll" class="roll-button" title="Roll a new call sign" aria-label="Roll a new call sign"><span data-icon="dice"></span></button>
+            </div>
+
+            <button id="startbutton" class="launch-button"><span data-icon="rocket"></span> LAUNCH</button>
+            <div class="launch-hint" id="launchHint"></div>
+            <button id="altStartButton" class="text-button"></button>
+        </div>
+
+        <!-- Mars. Pip the robot hovers above it and a landing module comes down.
+             Click Pip to spin it. Click the module to make it hop. -->
+        <div class="landing-ground" id="landingGround"></div>
+        <button class="lander" id="lander" aria-label="Landing module"></button>
+        <div class="landing-dust" id="landingDust"></div>
+        <button class="landing-pip pip" id="landingPip" aria-label="Pip the robot"></button>
+        <div class="pip-bubble" id="pipBubble"></div>
+
+        <div class="landing-foot">
+            <button id="sourcesbutton" class="text-button">For grown-ups: where the data comes from</button>
+            <span>·</span>
+            <a href="https://api.nasa.gov/" target="_blank" rel="noopener">NASA DONKI</a>
+        </div>
+
+    </div>
+
+    <!-- ===== THE AIRLOCK (the launch) =====
+         The crew goes into the base through an airlock: the door shuts, the bolts lock,
+         air rushes in (fog, 1.00 to 0.00), the bolts unlock and the doors open onto Mars.
+         It sits above both screens, so the game screen can appear behind the doors.
+         Click it to skip. The code is launch() in js/intro.js. -->
+    <div class="airlock" id="airlock">
+        <!-- Everything in here shakes together -->
+        <div class="airlock-body" id="airlockBody">
+            <div class="airlock-door left" id="doorLeft">
+                <div class="door-window"></div>
+                <div class="door-label">HAB-1</div>
+                <div class="door-plate"></div>
+            </div>
+            <div class="airlock-door right" id="doorRight">
+                <div class="door-window"></div>
+                <div class="door-label">AIRLOCK</div>
+                <div class="door-plate"></div>
+            </div>
+
+            <!-- The locking bolts: they slide across the gap between the doors -->
+            <div class="lock-bolt top"><span class="bolt-lamp"></span></div>
+            <div class="lock-bolt bottom"><span class="bolt-lamp"></span></div>
+
+            <!-- The vents in the walls. The fog comes out of them (VENTS in js/intro.js). -->
+            <div class="airlock-vent left top"></div>
+            <div class="airlock-vent left bottom"></div>
+            <div class="airlock-vent right top"></div>
+            <div class="airlock-vent right bottom"></div>
+
+            <div class="airlock-fog"></div>
+            <div class="airlock-smoke" id="airlockSmoke"></div>
+
+            <!-- The control panel: status light, the lock wheel with the number, the air gauge -->
+            <div class="airlock-panel">
+                <div class="airlock-status"><span class="airlock-light"></span><span id="airlockStatus"></span></div>
+                <div class="lock-dial">
+                    <div class="lock-wheel"></div>
+                    <div class="lock-hub"><span id="airlockNumber"></span></div>
+                </div>
+                <div class="airlock-gauge"><div class="airlock-gauge-fill" id="airlockGauge"></div></div>
+                <div class="airlock-skip">Click to skip</div>
+            </div>
+        </div>
+
+        <!-- Floats up while the doors open -->
+        <div class="airlock-title"><span id="airlockTitle"></span><small>Sol 1 of 10 · Keep the crew safe!</small></div>
+    </div>
+
+    <!-- ===== GAME SCREEN ===== -->
+    <div class="gamescreen">
+        <div class="game-layout">
+            <div class="side-panel">
+                <!-- The cards picked for this turn. They are played when the turn ends. -->
+                <div class="plan-box">
+                    <div class="plan-header">
+                        <span class="panel-title">Your plan</span>
+                        <button id="clearPlanButton" class="small-button">Clear</button>
+                    </div>
+                    <div id="planList" class="plan-list"></div>
+                    <div id="planPower" class="small-text"></div>
+                </div>
+
+                <!-- Fun space facts -->
+                <div class="facts-panel" id="facts">
+                    <div class="facts-head">
+                        <div class="pip facts-pip" id="factsPip"></div>
+                        <span class="panel-title">Pip's space facts</span>
+                    </div>
+                    <div class="facts-bubble">
+                        <h4 id="factTitle"></h4>
+                        <p id="factText"></p>
+                    </div>
+                    <button id="randomFactBtn" class="small-button"><span data-icon="dice"></span> Another fact</button>
+                </div>
+            </div>
+
+            <div class="left-panel">
+                <div class="ticker">
+                    <div class="ticker-text" id="tickerText"></div>
+                </div>
+
+                <!-- Sol, turn, day or night -->
+                <div class="top-row">
+                    <span id="solText">Sol 1 / 10</span>
+                    <div class="turn-box">
+                        <!-- One square for every turn of the sol. Drawn by renderTop(). -->
+                        <div class="turn-track" id="turnTrack"></div>
+                        <span id="turnText">Turn 1 / 5</span>
+                    </div>
+                    <span id="timeText">Day</span>
+                    <button class="small-button sound-button" title="Sound on or off"></button>
+                    <button id="menubutton" class="small-button">Menu</button>
+                </div>
+
+                <!-- Science bar: fills up towards the next discovery -->
+                <div class="xp-section" id="scienceStat">
+                    <div class="xp-header">
+                        <span><span data-icon="science"></span> Science</span>
+                        <span id="scienceText">0 / 25</span>
+                    </div>
+                    <div class="xp-bar">
+                        <div class="xp-fill" id="scienceFill"></div>
+                    </div>
+                    <div class="small-text" id="discoveryText">Discoveries: 0 (goal: 5)</div>
+                </div>
+
+                <!-- Picture of the base -->
+                <div class="scene" id="scene">
+                    <img src="assets/game_day1.png" class="background" id="sceneImage" alt="The Mars base">
+                    <div class="scene-effect" id="sceneEffect"></div>
+
+                    <div class="dust-layer" id="dustLayer"></div>
+
+                    <div class="badges" id="badges"></div>
+                    <div class="toast" id="toast"></div>
+                </div>
+
+                <!-- The three meters -->
+                <div class="stats">
+                    <div class="stat" id="healthStat">
+                        <div class="stat-header">
+                            <span><img src="assets/healthBar.png" class="stat-icon" alt=""> Health</span>
+                            <span id="healthText">100 / 100</span>
+                        </div>
+                        <div class="xp-bar">
+                            <div class="life-fill" id="healthFill"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat" id="powerStat">
+                        <div class="stat-header">
+                            <span><img src="assets/energyBar.png" class="stat-icon" alt=""> Power</span>
+                            <span id="powerText">60 / 100</span>
+                        </div>
+                        <div class="xp-bar">
+                            <div class="energy-fill" id="powerFill"></div>
+                        </div>
+                        <div class="small-text" id="backupText">Backup battery: 0 / 60</div>
+                    </div>
+
+                    <div class="stat" id="doseStat">
+                        <div class="stat-header">
+                            <span><img src="assets/radiationBar.png" class="stat-icon" alt=""> Radiation</span>
+                            <span id="doseText">0 / 100</span>
+                        </div>
+                        <div class="xp-bar">
+                            <div class="radiation-fill" id="doseFill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- This turn's event -->
+                <div class="event-box" id="eventBox">
+                    <div class="event-title">
+                        <span id="eventIcon"></span>
+                        <span id="eventName"></span>
+                        <span class="data-label" id="eventLabel"></span>
+                    </div>
+                    <p id="eventText"></p>
+                    <ul id="eventNews"></ul>
+                </div>
+
+                <!-- What the cards did this turn, and how the last turn ended -->
+                <div class="news-box">
+                    <div class="news-title" id="cardNewsTitle">Last turn: your cards</div>
+                    <ul id="cardNews"></ul>
+                    <div class="news-title" id="turnNewsTitle">Last turn: how it ended</div>
+                    <ul id="turnNews"></ul>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="panel-title">Pick your cards, then end the turn</div>
+                <div class="cards">
+                    <div class="card" id="research">
+                        <img src="assets/research.png" alt="">
+                        <div class="card-info"><div class="card-name"></div><div class="card-cost"></div><div class="card-note"></div></div>
+                    </div>
+                    <div class="card" id="chargeBackup">
+                        <img src="assets/chargeBackup.png" alt="">
+                        <div class="card-info"><div class="card-name"></div><div class="card-cost"></div><div class="card-note"></div></div>
+                    </div>
+                    <div class="card" id="greenhouse">
+                        <img src="assets/greenhouse.png" alt="">
+                        <div class="card-info"><div class="card-name"></div><div class="card-cost"></div><div class="card-note"></div></div>
+                    </div>
+                    <div class="card" id="shelter">
+                        <img src="assets/shelter.png" alt="">
+                        <div class="card-info"><div class="card-name"></div><div class="card-cost"></div><div class="card-note"></div></div>
+                    </div>
+                    <div class="card" id="explore">
+                        <img src="assets/explore.png" alt="">
+                        <div class="card-info"><div class="card-name"></div><div class="card-cost"></div><div class="card-note"></div></div>
+                    </div>
+                    <div class="card" id="crank">
+                        <img src="assets/crank.png" alt="">
+                        <div class="card-info"><div class="card-name"></div><div class="card-cost"></div><div class="card-note"></div></div>
+                    </div>
+                </div>
+
+                <div class="panel-title">Free action</div>
+                <div class="card" id="callEarth">
+                    <img src="assets/ask.png" alt="">
+                    <div class="card-info"><div class="card-name">Call Earth</div><div class="card-cost" id="earthCost"></div><div class="card-note" id="earthNote"></div></div>
+                </div>
+
+                <button id="endTurnButton" class="main-button end-turn">End turn →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== POPUPS (only one is shown at a time) ===== -->
+
+    <div class="overlay" id="sourcesPopup">
+        <div class="popup">
+            <h2>Where does this come from?</h2>
+            <p id="sourcesData"></p>
+            <h3>Where the storm data comes from</h3>
+            <ul id="dataSources"></ul>
+            <h3>How the game simplifies it</h3>
+            <ul id="dataNotes"></ul>
+            <h3>Other real facts in the game</h3>
+            <ul id="sourcesList" class="fact-list"></ul>
+            <!-- The two recorded sounds of the airlock (RECORDINGS in js/sound.js). dklon asks to be credited. -->
+            <h3>Sounds</h3>
+            <ul>
+                <li>Air rushing into the airlock: <a href="https://opengameart.org/content/steam-release-sounds" target="_blank" rel="noopener">"Steam release sounds"</a> by bart (CC0), shortened.</li>
+                <li>Airlock door opening: <a href="https://opengameart.org/content/vacuumpressure-seal-opening" target="_blank" rel="noopener">"Vacuum/Pressure Seal Opening"</a> by dklon (<a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener">CC-BY 3.0</a>), shortened.</li>
+                <li>All other sounds are made by the game itself.</li>
+            </ul>
+            <button class="main-button" id="sourcesClose">Close</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="earthPopup">
+        <div class="popup">
+            <h2><span data-icon="dishOn"></span> Call Earth</h2>
+            <p>Earth is far away. The answer arrives 1 or 2 turns later.</p>
+            <div id="earthTopics" class="choice-list"></div>
+            <button class="small-button" id="earthClose">Cancel</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="solReportPopup">
+        <div class="popup">
+            <h2 id="reportTitle">Sol report</h2>
+            <ul id="reportList"></ul>
+            <p id="reportForecast" class="forecast"></p>
+            <button class="main-button" id="reportClose">Continue</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="upgradePopup">
+        <div class="popup">
+            <h2><span data-icon="science"></span> Discovery!</h2>
+            <p>Your science paid off. Pick one upgrade for the base.</p>
+            <div id="upgradeChoices" class="choice-list"></div>
+        </div>
+    </div>
+
+    <div class="overlay" id="endPopup">
+        <div class="popup">
+            <h2 id="endTitle"></h2>
+            <p id="endText"></p>
+            <div class="end-stats" id="endStats"></div>
+            <div id="endStory" class="story-box"></div>
+            <h3 id="endDebriefTitle">What mattered most</h3>
+            <ul id="endDebrief" class="fact-list"></ul>
+            <div class="end-buttons">
+                <button class="main-button" id="newMissionButton">New mission</button>
+                <button class="small-button" id="endMenuButton">Main menu</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="menuPopup">
+        <div class="popup">
+            <h2>Menu</h2>
+            <p>The game is paused.</p>
+            <div class="choice-list">
+                <button class="main-button" id="menuResume">Keep playing</button>
+                <button class="small-button" id="menuTrain">Train with Pip again</button>
+                <button class="small-button" id="menuRestart">Start a new mission</button>
+                <button class="small-button" id="menuQuit">Back to the start screen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TRAINING: Pip guides the first turns (js/intro.js) ===== -->
+
+    <div class="coach-ring" id="coachRing"></div>
+
+    <div class="coach" id="coach">
+        <div class="coach-pip pip" id="coachPip"></div>
+        <div class="coach-body">
+            <div class="coach-top">
+                <span class="coach-name">PIP</span>
+                <div class="coach-progress"><div id="coachProgress"></div></div>
+            </div>
+            <p class="coach-text" id="coachText"></p>
+            <div class="coach-actions">
+                <button class="text-button" id="coachSkip">Skip training</button>
+                <span class="coach-wait" id="coachWait">Your move!</span>
+                <button class="main-button" id="coachNext">Next ▸</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="gradPopup">
+        <div class="popup grad">
+            <div class="grad-badge"><div class="pip" id="gradPip"></div></div>
+            <div class="kicker">Training complete</div>
+            <h2>Junior Astronaut</h2>
+            <div class="grad-name" id="gradName"></div>
+            <p>You ran the base, fed the crew and beat a solar storm. Now the real mission: 10 sols, 5 discoveries, and a real storm on the way.</p>
+            <button class="launch-button" id="gradStart"><span data-icon="rocket"></span> START THE MISSION</button>
+        </div>
+    </div>
+
+    <!-- The order matters: data first, then the rules, then the page code. -->
+    <script src="js/data.js"></script>
+    <script src="js/radiationData.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/icons.js"></script>
+    <script src="js/sound.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/intro.js"></script>
+    <script src="js/rocket.js"></script>
+    <script src="js/satelite.js"></script>
+</body>
+</html>
