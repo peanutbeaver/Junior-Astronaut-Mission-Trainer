@@ -178,8 +178,6 @@ The Sources page inside the game lists all of these with links.
 
 **The facts need a final check.** The facts shown in the game come from the sources named beside them, but they have not all been checked line by line against those sources.
 
-**Use of AI tools.** Parts of the code and this README were written with the help of an AI assistant, and the card and scene artwork was made with AI image tools. The game design, the rules, the balance and the choice of data are the team's own.
-
 **Sound credits.** Two airlock sounds are recordings from OpenGameArt.org: "Steam release sounds" by bart (CC0) and "Vacuum/Pressure Seal Opening" by dklon (CC-BY 3.0). Both were shortened. All other sounds are made by the game itself.
 
 **Accessibility.** With "reduce motion" switched on in the device settings, the airlock, the hovering robot and the landing are skipped. There is a sound button on every screen. Icons are drawn pixel art, with the meaning also written in words.
