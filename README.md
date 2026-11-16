@@ -26,7 +26,7 @@ There is no rules page. A small robot called Pip teaches the game inside the fir
 
 ## How to run it
 
-You can access it by going to [onemoresol.earth](https://onemoresol.earth).
+You can access it by going to [onemoresol.earth](https://onemoresol.earth)
 
 To run it from the files instead:
 
