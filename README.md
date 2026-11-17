@@ -189,3 +189,11 @@ The Sources page inside the game lists all of these with links.
 - Radiation only becomes a real threat near the end, because the real data contains one storm.
 - Charging the backup battery rarely decides a mission.
 - There is no read-aloud mode yet for children who are still learning to read.
+
+**Copyright © 2026. All rights reserved.**
+
+This project and all associated source code, assets, designs, and documentation are the exclusive intellectual property of the author.
+
+No permission is granted to copy, reproduce, modify, redistribute, publish, or use any part of this project for commercial purposes without prior written authorization from the copyright holder.
+
+Unauthorized use, distribution, or commercial exploitation is prohibited.
