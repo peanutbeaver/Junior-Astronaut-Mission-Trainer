@@ -1,4 +1,4 @@
-# One More Sol
+# OneMoreSol
 
 **Junior Astronaut Mission Trainer.** A browser game for ages 7 to 12: keep a Mars base alive for ten sols, and survive a solar storm that really happened.
 
